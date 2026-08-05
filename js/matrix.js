@@ -11,7 +11,7 @@
 
   const GLYPHS =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-  const FONT_SIZE = 16;
+  const FONT_SIZE = 11;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   let columns = 0;
@@ -36,8 +36,8 @@
     if (now - lastFrame < frameInterval) return;
     lastFrame = now;
 
-    // translucent black fade => trailing effect
-    ctx.fillStyle = "rgba(0, 6, 0, 0.08)";
+    // translucent black fade => long dim trailing streams
+    ctx.fillStyle = "rgba(0, 6, 0, 0.05)";
     ctx.fillRect(0, 0, width, height);
 
     ctx.font = FONT_SIZE + "px monospace";
@@ -48,9 +48,9 @@
 
       // occasional bright "head" glyph
       if (Math.random() > 0.975) {
-        ctx.fillStyle = "#c8ffcf";
+        ctx.fillStyle = "#9fdfab";
       } else {
-        ctx.fillStyle = "#00ff41";
+        ctx.fillStyle = "rgba(0, 255, 65, 0.75)";
       }
       ctx.fillText(ch, x, y);
 
