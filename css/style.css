@@ -1,0 +1,365 @@
+/* =========================================================================
+   ATTACK_SURFACE // Project #2 — retro CRT terminal theme
+   Original stylesheet. Recreates an early-2000s "cyber terminal" look:
+   green-on-black, monospace, scanlines, glitch, boxed panels.
+   ========================================================================= */
+
+:root {
+  --bg:        #000600;
+  --bg-panel:  #010d02;
+  --green:     #00ff41;   /* primary matrix green */
+  --green-dim: #10b038;   /* dimmer green for body text */
+  --green-mut: #0a5c22;   /* muted borders */
+  --amber:     #ffcf3f;   /* accent / warnings */
+  --red:       #ff4d4d;   /* danger / attacker */
+  --scan:      rgba(0, 255, 65, 0.06);
+  --glow:      0 0 6px rgba(0, 255, 65, 0.55);
+  --mono: "Share Tech Mono", "VT323", "Courier New", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--green-dim);
+  font-family: var(--mono);
+  font-size: 18px;
+  line-height: 1.6;
+  letter-spacing: 0.3px;
+  min-height: 100%;
+}
+
+/* Full-page background canvas for the code-rain */
+#matrix-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  display: block;
+}
+
+/* CRT scanline + vignette overlay sits above everything, ignores clicks */
+#crt-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent 2px,
+      var(--scan) 3px,
+      var(--scan) 3px
+    );
+  mix-blend-mode: screen;
+  animation: flicker 4s infinite steps(60);
+}
+#crt-overlay::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.55) 100%);
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 0.85; }
+  50%      { opacity: 1; }
+  52%      { opacity: 0.7; }
+}
+
+/* =========================================================================
+   BOOT / ENTER SCREEN
+   ========================================================================= */
+#boot {
+  position: fixed;
+  inset: 0;
+  z-index: 8000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: rgba(0, 4, 0, 0.55);
+  transition: opacity 0.8s ease;
+  padding: 24px;
+}
+#boot.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.boot-kicker {
+  color: var(--green-dim);
+  font-size: 0.9rem;
+  opacity: 0.8;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+}
+
+/* Glitch title */
+.glitch {
+  position: relative;
+  color: var(--green);
+  font-size: clamp(2.4rem, 9vw, 6rem);
+  font-weight: 700;
+  letter-spacing: 6px;
+  text-shadow: var(--glow);
+  margin: 0.2rem 0;
+}
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+}
+.glitch::before {
+  color: var(--red);
+  clip-path: inset(0 0 55% 0);
+  animation: glitch-top 2.4s infinite linear alternate;
+}
+.glitch::after {
+  color: #00b3ff;
+  clip-path: inset(55% 0 0 0);
+  animation: glitch-bot 2s infinite linear alternate;
+}
+@keyframes glitch-top {
+  0%   { transform: translate(0,0); }
+  20%  { transform: translate(-3px,-2px); }
+  40%  { transform: translate(2px,1px); }
+  60%  { transform: translate(-2px,0); }
+  80%  { transform: translate(3px,-1px); }
+  100% { transform: translate(0,0); }
+}
+@keyframes glitch-bot {
+  0%   { transform: translate(0,0); }
+  20%  { transform: translate(3px,2px); }
+  40%  { transform: translate(-2px,-1px); }
+  60%  { transform: translate(2px,1px); }
+  80%  { transform: translate(-3px,1px); }
+  100% { transform: translate(0,0); }
+}
+
+.boot-sub {
+  color: var(--green-dim);
+  font-size: clamp(0.85rem, 2.4vw, 1.15rem);
+  margin: 0.4rem 0 2rem;
+  max-width: 40ch;
+}
+
+.go-btn {
+  background: transparent;
+  color: var(--green);
+  border: 2px solid var(--green);
+  font-family: var(--mono);
+  font-size: 1.25rem;
+  letter-spacing: 3px;
+  padding: 0.7rem 2.4rem;
+  cursor: pointer;
+  text-shadow: var(--glow);
+  box-shadow: var(--glow);
+  transition: background 0.15s, color 0.15s;
+}
+.go-btn:hover,
+.go-btn:focus {
+  background: var(--green);
+  color: #000;
+  outline: none;
+}
+.blink { animation: blink 1s steps(2) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* =========================================================================
+   MAIN SITE SHELL
+   ========================================================================= */
+#site {
+  position: relative;
+  z-index: 10;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 24px 20px 80px;
+  opacity: 0;
+  transition: opacity 0.8s ease 0.2s;
+}
+#site.visible { opacity: 1; }
+
+/* Dim the code-rain once we are inside the site */
+body.entered #matrix-canvas { opacity: 0.14; }
+
+/* Header / masthead */
+.masthead {
+  border: 1px solid var(--green-mut);
+  background: var(--bg-panel);
+  padding: 14px 18px;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.masthead .brand {
+  color: var(--green);
+  font-size: 1.4rem;
+  letter-spacing: 3px;
+  text-shadow: var(--glow);
+}
+.masthead .byline { color: var(--green-dim); font-size: 0.85rem; opacity: 0.85; }
+
+/* Tab navigation */
+nav.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  border: 1px solid var(--green-mut);
+  background: var(--bg-panel);
+  padding: 8px;
+  margin-bottom: 18px;
+  position: sticky;
+  top: 8px;
+  z-index: 50;
+}
+nav.tabs a {
+  color: var(--green-dim);
+  text-decoration: none;
+  padding: 6px 14px;
+  border: 1px solid transparent;
+  letter-spacing: 1px;
+  font-size: 0.95rem;
+  transition: all 0.12s;
+  white-space: nowrap;
+}
+nav.tabs a:hover { color: var(--green); border-color: var(--green-mut); }
+nav.tabs a.active {
+  color: #000;
+  background: var(--green);
+  border-color: var(--green);
+  text-shadow: none;
+  box-shadow: var(--glow);
+}
+
+/* Content panels */
+main { min-height: 50vh; }
+section.tab {
+  display: none;
+  animation: fadein 0.4s ease;
+}
+section.tab.active { display: block; }
+@keyframes fadein { from { opacity: 0; transform: translateY(6px);} to {opacity:1; transform:none;} }
+
+.panel {
+  border: 1px solid var(--green-mut);
+  background: var(--bg-panel);
+  padding: 22px 24px;
+  margin-bottom: 18px;
+}
+
+h1, h2, h3 { color: var(--green); text-shadow: var(--glow); line-height: 1.25; }
+h1 { font-size: 1.8rem; letter-spacing: 2px; margin-top: 0; }
+h2 { font-size: 1.35rem; letter-spacing: 1px; border-bottom: 1px dashed var(--green-mut); padding-bottom: 6px; }
+h3 { font-size: 1.1rem; }
+p { margin: 0.8rem 0; }
+a { color: var(--amber); }
+
+.prompt-label { color: var(--green); }
+.prompt-label::before { content: "> "; }
+
+/* little terminal cursor */
+.cursor::after {
+  content: "_";
+  animation: blink 1s steps(2) infinite;
+  color: var(--green);
+}
+
+/* callout boxes */
+.callout {
+  border-left: 3px solid var(--amber);
+  background: rgba(255, 207, 63, 0.05);
+  padding: 10px 14px;
+  margin: 14px 0;
+  color: var(--green-dim);
+}
+.callout.danger { border-left-color: var(--red); background: rgba(255,77,77,0.06); }
+.callout .tag { color: var(--amber); font-weight: bold; letter-spacing: 1px; }
+.callout.danger .tag { color: var(--red); }
+
+/* fake terminal / code sample */
+.termbox {
+  background: #000;
+  border: 1px solid var(--green-mut);
+  padding: 12px 14px;
+  margin: 14px 0;
+  font-size: 0.92rem;
+  color: var(--green-dim);
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-x: auto;
+}
+.termbox .said { color: var(--green); }
+.termbox .attacker { color: var(--red); }
+.termbox .ai { color: #00b3ff; }
+
+/* type list for injection kinds */
+.kinds { list-style: none; padding: 0; margin: 0; }
+.kinds li { border: 1px solid var(--green-mut); padding: 14px 16px; margin-bottom: 12px; }
+.kinds li .k-title { color: var(--green); font-size: 1.05rem; letter-spacing: 1px; }
+.kinds li .k-tag { color: var(--amber); font-size: 0.8rem; }
+
+/* diagrams */
+figure.diagram { margin: 18px 0; text-align: center; }
+figure.diagram svg { max-width: 100%; height: auto; }
+figure.diagram figcaption { color: var(--green-dim); font-size: 0.82rem; opacity: 0.85; margin-top: 6px; }
+
+/* spot-it checklist */
+.checklist { list-style: none; padding: 0; }
+.checklist li { margin: 8px 0; padding-left: 26px; position: relative; }
+.checklist li::before { content: "[+]"; position: absolute; left: 0; color: var(--green); }
+
+/* context memo definition rows */
+.memo-row { display: grid; grid-template-columns: 190px 1fr; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--green-mut); }
+.memo-row .k { color: var(--green); letter-spacing: 1px; }
+
+/* footer */
+footer.site-foot {
+  text-align: center;
+  color: var(--green-mut);
+  font-size: 0.8rem;
+  margin-top: 30px;
+  letter-spacing: 1px;
+}
+footer.site-foot a { color: var(--green-dim); }
+
+/* skip / small controls */
+.skip-boot {
+  margin-top: 20px;
+  color: var(--green-mut);
+  font-size: 0.8rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  letter-spacing: 2px;
+  text-decoration: underline;
+}
+.skip-boot:hover { color: var(--green-dim); }
+
+/* =========================================================================
+   RESPONSIVE
+   ========================================================================= */
+@media (max-width: 620px) {
+  body { font-size: 16px; }
+  #site { padding: 14px 12px 60px; }
+  nav.tabs { position: static; }
+  .memo-row { grid-template-columns: 1fr; gap: 2px; }
+  .memo-row .k { margin-top: 6px; }
+  .panel { padding: 16px 16px; }
+}
+
+/* Respect reduced-motion users */
+@media (prefers-reduced-motion: reduce) {
+  #crt-overlay, .glitch::before, .glitch::after, .blink, .cursor::after { animation: none !important; }
+}
