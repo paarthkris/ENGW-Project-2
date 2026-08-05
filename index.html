@@ -18,16 +18,15 @@
   <div id="boot">
     <div class="boot-kicker">// incoming transmission</div>
     <h1 class="glitch" data-text="ATTACK_SURFACE">ATTACK_SURFACE</h1>
-    <p class="boot-sub">You can hack an AI without writing a single line of code &mdash; just&nbsp;plain&nbsp;words. Here's how.</p>
+    <p class="boot-sub">A plain-language briefing on prompt injection &mdash; how AI systems can be manipulated with ordinary words, and why it matters to everyone who uses them.</p>
     <button id="go-btn" class="go-btn" aria-label="Enter site">&gt; GO <span class="blink">_</span></button>
-    <button id="skip-boot" class="skip-boot">[ skip intro ]</button>
   </div>
 
   <!-- ============================ MAIN SITE ============================ -->
   <div id="site">
     <header class="masthead">
       <span class="brand">ATTACK_SURFACE</span>
-      <span class="byline">a public explainer by Paarth Krishnatrey // ENGW3302</span>
+      <span class="byline">An Explanation by Paarth Krishnatrey // ENGW-3302</span>
     </header>
 
     <nav class="tabs" aria-label="Primary">
@@ -36,6 +35,7 @@
       <a href="#prompt-injection">PROMPT INJECTION</a>
       <a href="#what-it-looks-like">WHAT IT LOOKS LIKE</a>
       <a href="#context-memo">CONTEXT MEMO</a>
+      <a href="#references">REFERENCES</a>
     </nav>
 
     <main>
@@ -335,10 +335,33 @@ What the <span class="ai">AI</span> reads (hidden in white-on-white text):
           </p>
         </div>
       </section>
+
+      <!-- ------------------------- REFERENCES ------------------------- -->
+      <section id="references" class="tab" aria-labelledby="refs-h">
+        <div class="panel">
+          <h1 id="refs-h">Works Cited</h1>
+          <p style="opacity:.85;"><em>For my instructor &mdash; evidence for the research behind this site. Kept separate from the public document, per the assignment.</em></p>
+          <div class="callout">
+            <span class="tag">[ TO DO &mdash; PAARTH ]</span>
+            <p style="margin:6px 0 0;">
+              Replace the placeholders below with the real sources you used, in your course's citation style
+              (APA / MLA). Delete this note when done.
+            </p>
+          </div>
+          <ul>
+            <li>OWASP &mdash; "Top 10 for Large Language Model Applications" (entry on prompt injection).</li>
+            <li>NIST &mdash; publications on adversarial machine learning / AI system risks.</li>
+            <li>A reputable news or research write-up documenting a real-world indirect prompt-injection case.</li>
+            <li>Krishnatrey, P., &amp; Ormseth, E. &mdash; <em>"AI Data Centers: Energy, Cybersecurity, and Regulation"</em> (Project&nbsp;#1, ENGW-3302) &mdash; source of the attack-surface framing.</li>
+          </ul>
+          <h2>Format template</h2>
+          <div class="termbox">Author Last, First. "Title of Source." <em>Publisher / Site</em>, Day Month Year, URL. Accessed Day Month Year.</div>
+        </div>
+      </section>
     </main>
 
     <footer class="site-foot">
-      <p>ATTACK_SURFACE // Project #2 &mdash; ENGW3302 &mdash; Paarth Krishnatrey &middot; <a href="references.html">references</a></p>
+      <p>ATTACK_SURFACE // Project #2 &mdash; ENGW-3302 &mdash; Paarth Krishnatrey &middot; <a href="#references">references</a></p>
     </footer>
   </div>
 

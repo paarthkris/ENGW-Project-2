@@ -10,7 +10,7 @@
   const ctx = canvas.getContext("2d");
 
   const GLYPHS =
-    "アカサタナハマヤラワイキシチニヒミリウクスツヌフムユルエケセテネヘメレオコソトノホモヨロ0123456789$%#@&*+=/<>[]{}";
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
   const FONT_SIZE = 16;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 

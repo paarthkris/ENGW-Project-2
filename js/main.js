@@ -1,29 +1,42 @@
 /* =========================================================================
-   main.js — boot -> enter transition, tab switching, hash routing.
+   main.js — boot -> enter transition, tab switching, hash routing,
+   and back-button support (Back from the site returns to the boot screen).
    Original code. No external dependencies.
    ========================================================================= */
 (function () {
   const boot = document.getElementById("boot");
   const site = document.getElementById("site");
   const goBtn = document.getElementById("go-btn");
-  const skipBtn = document.getElementById("skip-boot");
   const tabLinks = Array.from(document.querySelectorAll("nav.tabs a"));
   const sections = Array.from(document.querySelectorAll("section.tab"));
   const validTabs = sections.map((s) => s.id);
 
   let entered = false;
 
-  function enterSite() {
+  function enterSite(pushHistory) {
     if (entered) return;
     entered = true;
     boot.classList.add("hidden");
     document.body.classList.add("entered");
     site.classList.add("visible");
-    // dim the rain (handled by CSS body.entered), route to current hash
+    if (pushHistory !== false) {
+      // Push a history entry so the browser Back button returns to the boot
+      // screen instead of leaving the site.
+      const hash = location.hash || "#home";
+      history.pushState({ entered: true }, "", hash);
+    }
     routeFromHash();
-    // move focus to the active tab for keyboard users
     const active = document.querySelector("nav.tabs a.active");
     if (active) active.focus();
+  }
+
+  function exitToBoot() {
+    if (!entered) return;
+    entered = false;
+    boot.classList.remove("hidden");
+    document.body.classList.remove("entered");
+    site.classList.remove("visible");
+    window.scrollTo({ top: 0 });
   }
 
   function showTab(id) {
@@ -32,7 +45,6 @@
     tabLinks.forEach((a) =>
       a.classList.toggle("active", a.getAttribute("href") === "#" + id)
     );
-    // scroll content area to top on tab change
     if (entered) window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -42,10 +54,9 @@
   }
 
   // --- events ---
-  if (goBtn) goBtn.addEventListener("click", enterSite);
-  if (skipBtn) skipBtn.addEventListener("click", enterSite);
+  if (goBtn) goBtn.addEventListener("click", function () { enterSite(); });
 
-  // Enter / Space / any letter key on the boot screen enters the site
+  // Enter / Space / G on the boot screen enters the site
   document.addEventListener("keydown", function (e) {
     if (!entered && (e.key === "Enter" || e.key === " " || e.key === "g" || e.key === "G")) {
       e.preventDefault();
@@ -53,20 +64,31 @@
     }
   });
 
-  // Tab clicks update the hash; hashchange drives the actual switch
+  // Tab clicks: mark history entries as "inside the site" so Back walks
+  // through tabs and finally lands on the boot screen.
   tabLinks.forEach((a) => {
-    a.addEventListener("click", function () {
-      // let the default hash change happen; if already entered nothing else needed
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      const id = a.getAttribute("href").replace(/^#/, "");
       if (!entered) enterSite();
+      if (("#" + id) !== location.hash) {
+        history.pushState({ entered: true }, "", "#" + id);
+      }
+      showTab(id);
     });
   });
 
-  window.addEventListener("hashchange", function () {
-    if (!entered) enterSite();
-    else routeFromHash();
+  // Back/forward: states tagged {entered:true} are inside the site;
+  // anything else (the initial entry) is the boot screen.
+  window.addEventListener("popstate", function (e) {
+    if (e.state && e.state.entered) {
+      if (!entered) enterSite(false);
+      routeFromHash();
+    } else {
+      exitToBoot();
+    }
   });
 
-  // If someone lands with a deep link (e.g. #context-memo), still show boot
-  // first, but pre-select the right tab so it's ready on enter.
+  // Deep links (e.g. #context-memo): pre-select the tab; boot still shows.
   routeFromHash();
 })();
