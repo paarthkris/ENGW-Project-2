@@ -106,9 +106,11 @@ html, body {
   font-size: clamp(2.4rem, 9vw, 6rem);
   font-weight: 700;
   letter-spacing: 6px;
-  margin: 0.2rem 0 2.6rem;
+  margin: 0.2rem 0;
   z-index: 1;
 }
+.glitch + .glitch { margin-top: 0.6rem; }
+.glitch:last-of-type { margin-bottom: 2.6rem; }
 .glitch::before,
 .glitch::after {
   content: attr(data-text);
