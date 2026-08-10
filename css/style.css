@@ -214,7 +214,8 @@ body.entered #matrix-canvas { opacity: 0.14; }
 /* Tab navigation */
 nav.tabs {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
   gap: 6px;
   border: 1px solid var(--green-mut);
   background: var(--bg-panel);
@@ -223,6 +224,7 @@ nav.tabs {
   position: sticky;
   top: 8px;
   z-index: 50;
+  scrollbar-width: thin;
 }
 nav.tabs a {
   color: var(--green-dim);
