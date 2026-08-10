@@ -29,8 +29,7 @@
     </header>
 
     <nav class="tabs" aria-label="Primary">
-      <a href="#home" class="active">HOME</a>
-      <a href="#about">ABOUT</a>
+      <a href="#home" class="active">HOME / ABOUT</a>
       <a href="#prompt-injection">PROMPT INJECTION</a>
       <a href="#what-it-looks-like">WHAT IT LOOKS LIKE</a>
       <a href="#context-memo">CONTEXT MEMO</a>
@@ -38,10 +37,10 @@
     </nav>
 
     <main>
-      <!-- ---------------------------- HOME ---------------------------- -->
+      <!-- ------------------------- HOME / ABOUT ------------------------- -->
       <section id="home" class="tab active" aria-labelledby="home-h">
         <div class="panel">
-          <h1 id="home-h" class="cursor">Welcome to the machine</h1>
+          <h1 id="home-h" class="cursor">Home/About</h1>
           <p>
             Most of us use AI without thinking much about it. We ask it to write emails, fix text messages,
             summarize long essays, plan trips, or even help us with financial questions.
@@ -77,83 +76,35 @@
         </div>
       </section>
 
-      <!-- ---------------------------- ABOUT ---------------------------- -->
-      <section id="about" class="tab" aria-labelledby="about-h">
-        <div class="panel">
-          <h1 id="about-h">About this project</h1>
-          <p>
-            I'm <strong>Paarth Krishnatrey</strong>, a cybersecurity and business administration student.
-            In my first project, my partner and I researched how AI data centers strain the power grid,
-            the environment, and their own security. My half focused on the security side: <em>attack
-            surfaces</em>, supply-chain risk, and how a digital break-in can cause real, physical damage.
-          </p>
-          <h2>From the data center to your desk</h2>
-          <p>
-            Researching attack surfaces changed how I look at the tools I use every day. An "attack surface"
-            is just the sum of all the ways something can be gotten at. A data center's attack surface
-            includes its networks, its sensors, and even the hardware in its shipping crates. But the AI
-            <em>models</em> we all use have an attack surface too &mdash; and one of the biggest openings is
-            the very thing that makes them useful: they read and act on human language.
-          </p>
-          <p>
-            That's the bridge I want to build with this project. My first paper spoke to engineers, regulators,
-            and IT professionals. This one is for everyone else &mdash; the millions of people typing questions
-            into AI who have never heard the phrase "prompt injection" but absolutely should.
-          </p>
-          <div class="callout">
-            <span class="tag">[ WHO THIS IS FOR ]</span>
-            <p style="margin:6px 0 0;">
-              Curious, non-technical people who use AI tools and want to understand a real risk without the
-              jargon. If you can send a text message, you can understand everything here.
-            </p>
-          </div>
-          <h2>Why it matters now</h2>
-          <p>
-            AI is being wired into email inboxes, web browsers, calendars, and "agents" that can take actions
-            on your behalf &mdash; book things, send messages, move files. The more an AI can <em>do</em>, the
-            more damage a sneaky instruction can cause. A trick that used to just produce a rude joke can now,
-            in the wrong setup, forward your private information. Understanding the risk is step one.
-          </p>
-        </div>
-      </section>
-
       <!-- ---------------------- PROMPT INJECTION ---------------------- -->
       <section id="prompt-injection" class="tab" aria-labelledby="pi-h">
         <div class="panel">
           <h1 id="pi-h">Prompt injection, explained</h1>
           <p>
-            To see the problem, you first have to see how an AI assistant reads text. Behind the scenes, the
-            AI is handed <strong>two kinds of writing at once</strong>, mashed into a single stream:
+            A chatbot can receive instructions from you and content from somewhere else at the same time. You
+            might ask it to summarize an email, read a webpage, or look through a document. The chatbot gets
+            your request along with the text it is supposed to read.
           </p>
-          <ul>
-            <li><strong>Instructions</strong> &mdash; the rules and requests it's supposed to follow (from the company that built it, and from you).</li>
-            <li><strong>Content</strong> &mdash; the raw material you asked it to work with: a web page, an email, a document, a review.</li>
-          </ul>
           <p>
-            Here's the catch. To the AI, both of those are <em>just text</em>. It doesn't get a clean label
-            saying "this part is a trustworthy command" and "this part is just stuff to read." So if a piece
-            of content contains a sentence that <em>looks</em> like an instruction, the AI may cheerfully
-            follow it. That confusion is the whole vulnerability.
+            The problem is that both instructions and outside content arrive as ordinary natural-language text.
+            The model does not get a perfect label separating "do this" from "read this." If the outside content
+            contains a command aimed at the AI, the model may treat that command as part of the task. That is
+            prompt injection. It is different from ordinary phishing because the attacker is trying to fool the
+            model that reads on your behalf, not just you.
           </p>
 
           <figure class="diagram" aria-labelledby="fig1-cap">
-            <svg viewBox="0 0 640 260" role="img" aria-label="Diagram showing trusted instructions and untrusted content being blended into one stream the AI cannot tell apart">
-              <rect x="0" y="0" width="640" height="260" fill="#010d02" stroke="#0a5c22"/>
-              <rect x="30" y="40" width="200" height="70" fill="none" stroke="#00ff41"/>
-              <text x="130" y="70" fill="#00ff41" font-family="monospace" font-size="15" text-anchor="middle">YOUR INSTRUCTIONS</text>
-              <text x="130" y="92" fill="#10b038" font-family="monospace" font-size="12" text-anchor="middle">"summarize this page"</text>
-              <rect x="30" y="150" width="200" height="70" fill="none" stroke="#ff4d4d"/>
-              <text x="130" y="180" fill="#ff4d4d" font-family="monospace" font-size="15" text-anchor="middle">CONTENT (untrusted)</text>
-              <text x="130" y="202" fill="#10b038" font-family="monospace" font-size="12" text-anchor="middle">a web page you didn't write</text>
-              <line x1="230" y1="75" x2="360" y2="115" stroke="#00ff41" stroke-width="1.5"/>
-              <line x1="230" y1="185" x2="360" y2="135" stroke="#ff4d4d" stroke-width="1.5"/>
-              <rect x="360" y="95" width="120" height="60" fill="none" stroke="#00b3ff"/>
-              <text x="420" y="130" fill="#00b3ff" font-family="monospace" font-size="14" text-anchor="middle">THE AI</text>
-              <line x1="480" y1="125" x2="560" y2="125" stroke="#00b3ff" stroke-width="1.5"/>
-              <text x="560" y="120" fill="#10b038" font-family="monospace" font-size="12" text-anchor="middle">acts</text>
-              <text x="420" y="185" fill="#ffcf3f" font-family="monospace" font-size="12" text-anchor="middle">can't tell them apart!</text>
-            </svg>
-            <figcaption id="fig1-cap">Fig 1. The AI receives your instructions and outside content as one blended stream &mdash; and can't reliably tell which is which. (Original diagram.)</figcaption>
+            <img
+              src="https://developer.ibm.com/developer/default/tutorials/awb-adversarial-prompting-security-llms/images/adversarial-prompting-diagram2.png"
+              alt="IBM diagram showing a malicious instruction reframed as an adversarial prompt, sent to a target language model, and producing either a positive or negative response"
+              loading="lazy"
+            />
+            <figcaption id="fig1-cap">
+              Fig. 1. External figure from IBM Developer's <em>Adversarial prompting: Testing and strengthening
+              the security and safety of large language models</em>, by Bryan Clark, published Dec. 3, 2024.
+              The diagram shows how a malicious instruction can be reframed as an adversarial prompt before it
+              reaches a target LLM. <a href="https://developer.ibm.com/tutorials/awb-adversarial-prompting-security-llms/" target="_blank" rel="noopener">View the original IBM Developer source.</a>
+            </figcaption>
           </figure>
 
           <h2>The main flavors</h2>
@@ -302,8 +253,8 @@ What the <span class="ai">AI</span> reads (hidden in white-on-white text):
             attack surface the public actually touches: the AI assistants they use. I kept the same core idea
             (an attack surface is every way a system can be gotten at) but swapped the technical framing for a
             single, concrete question: <em>how can an AI be tricked with plain words, and why should you
-            care?</em> I cut jargon, led with a hook, and used short sections, callout boxes, and two original
-            diagrams so a reader can follow along without any background.
+            care?</em> I cut jargon, led with a hook, and used short sections, callout boxes, and diagrams so a
+            reader can follow along without any background.
           </p>
 
           <h2>Design choices</h2>
@@ -312,7 +263,7 @@ What the <span class="ai">AI</span> reads (hidden in white-on-white text):
             background, a glitching title, and a "press GO to enter" screen. The look does rhetorical work: it
             signals "hacking/cyber" instantly, it's memorable enough to make a dry security topic inviting,
             and it fits the indie-web genre my audience associates with tech curiosity. I built it as tabs
-            (Home, About, Prompt Injection, What It Looks Like, this memo) so a reader &mdash; or my instructor
+            (Home/About, Prompt Injection, What It Looks Like, this memo) so a reader &mdash; or my instructor
             &mdash; can jump straight to any section by link. Every visual effect and all the code are my own
             original build; I recreated the <em>style</em> of sites I admire rather than copying any of them.
           </p>
@@ -357,6 +308,10 @@ What the <span class="ai">AI</span> reads (hidden in white-on-white text):
             <li>
               Kosinski, Matthew, and Amber Forrest. "What Is a Prompt Injection Attack?" <em>IBM Think</em>,
               IBM, 27 Feb. 2026, <a href="https://www.ibm.com/think/topics/prompt-injection" target="_blank" rel="noopener">www.ibm.com</a>. Accessed 10 Aug. 2026.
+            </li>
+            <li>
+              Clark, Bryan. "Adversarial Prompting: Testing and Strengthening the Security and Safety of Large
+              Language Models." <em>IBM Developer</em>, 3 Dec. 2024, <a href="https://developer.ibm.com/tutorials/awb-adversarial-prompting-security-llms/" target="_blank" rel="noopener">developer.ibm.com</a>. Accessed 10 Aug. 2026.
             </li>
             <li>
               Krishnatrey, P., and Ormseth, E. <em>"AI Data Centers: Energy, Cybersecurity, and Regulation"</em>
