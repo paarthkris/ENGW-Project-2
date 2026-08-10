@@ -1,5 +1,5 @@
 /* =========================================================================
-   ATTACK_SURFACE // Project #2 — retro CRT terminal theme
+   ATTACK_SURFACE // Project #2 retro CRT terminal theme
    Original stylesheet. Recreates an early-2000s "cyber terminal" look:
    green-on-black, monospace, scanlines, glitch, boxed panels.
    ========================================================================= */
@@ -99,7 +99,7 @@ html, body {
   letter-spacing: 4px;
 }
 
-/* Glitch title — solid white with red/green offset ghosts */
+/* Glitch title with solid white and red/green offset ghosts */
 .glitch {
   position: relative;
   color: #ffffff;
@@ -312,6 +312,12 @@ a { color: var(--amber); }
 .kinds li .k-title { color: var(--green); font-size: 1.05rem; letter-spacing: 1px; }
 .kinds li .k-tag { color: var(--amber); font-size: 0.8rem; }
 
+/* everyday examples on the recognition page */
+.looks-list { list-style: none; padding: 0; margin: 0; }
+.looks-list li { border: 1px solid var(--green-mut); padding: 14px 16px; margin-bottom: 12px; }
+.looks-list li .k-title { color: var(--green); font-size: 1.05rem; letter-spacing: 1px; }
+.looks-list li .k-tag { color: var(--amber); font-size: 0.8rem; }
+
 /* diagrams */
 figure.diagram { margin: 18px 0; text-align: center; }
 figure.diagram svg { max-width: 100%; height: auto; }
@@ -322,6 +328,7 @@ figure.diagram figcaption { color: var(--green-dim); font-size: 0.82rem; opacity
 .checklist { list-style: none; padding: 0; }
 .checklist li { margin: 8px 0; padding-left: 26px; position: relative; }
 .checklist li::before { content: "[+]"; position: absolute; left: 0; color: var(--green); }
+.source-note { color: var(--green-dim); font-size: 0.84rem; opacity: 0.9; }
 
 /* context memo definition rows */
 .memo-row { display: grid; grid-template-columns: 190px 1fr; gap: 10px; padding: 8px 0; border-bottom: 1px dashed var(--green-mut); }
