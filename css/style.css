@@ -325,9 +325,9 @@ figure.diagram img { display: block; max-width: 100%; height: auto; margin: 0 au
 figure.diagram figcaption { color: var(--green-dim); font-size: 0.82rem; opacity: 0.85; margin-top: 6px; }
 
 /* spot-it checklist */
-.checklist { list-style: none; padding: 0; }
-.checklist li { margin: 8px 0; padding-left: 26px; position: relative; }
-.checklist li::before { content: "[+]"; position: absolute; left: 0; color: var(--green); }
+.checklist { padding-left: 1.35rem; }
+.checklist li { margin: 10px 0; padding-left: 0.2rem; }
+.checklist li::marker { color: var(--green); }
 .source-note { color: var(--green-dim); font-size: 0.84rem; opacity: 0.9; }
 
 /* context memo definition rows */
