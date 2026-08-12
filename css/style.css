@@ -319,10 +319,18 @@ a { color: var(--amber); }
 .looks-list li .k-tag { color: var(--amber); font-size: 0.8rem; }
 
 /* diagrams */
-figure.diagram { margin: 18px 0; text-align: center; }
+figure.diagram { margin: 26px 0; text-align: center; }
 figure.diagram svg { max-width: 100%; height: auto; }
 figure.diagram img { display: block; max-width: 100%; height: auto; margin: 0 auto; background: #fff; }
-figure.diagram figcaption { color: var(--green-dim); font-size: 0.82rem; opacity: 0.85; margin-top: 6px; }
+figure.diagram figcaption {
+  max-width: 760px;
+  margin: 10px auto 0;
+  color: var(--green-dim);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  opacity: 0.85;
+  text-align: left;
+}
 
 /* spot-it checklist */
 .checklist { padding-left: 1.35rem; }
